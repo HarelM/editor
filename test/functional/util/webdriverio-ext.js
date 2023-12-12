@@ -1,5 +1,5 @@
-var artifacts = require("../../artifacts");
-var path = require("path");
+import artifacts from "../../artifacts";
+import path from "path";
 
 const extendWebdriverIO = async function() {
   await browser.setTimeout({ 'script': 20 * 1000 });
@@ -60,4 +60,4 @@ const extendWebdriverIO = async function() {
   }
 }
 
-module.exports = extendWebdriverIO;
+export default extendWebdriverIO;

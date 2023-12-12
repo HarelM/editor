@@ -1,8 +1,8 @@
-var assert = require('assert');
-var fs     = require("fs");
-var wd     = require("../../wd-helper");
-var config = require("../../config/specs");
-var helper = require("../helper");
+import assert from 'assert';
+import fs from "fs";
+import wd from "../../wd-helper";
+import config from "../../config/specs";
+import helper from "../helper";
 
 
 async function closeModal(wdKey) {

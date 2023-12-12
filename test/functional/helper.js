@@ -1,11 +1,11 @@
-var wd = require("../wd-helper");
-var {v1: uuid} = require('uuid');
-var geoServer = require("../geojson-server");
+import wd from "../wd-helper";
+import { v1 as uuid } from 'uuid';
+import geoServer from "../geojson-server";
 
 var testNetwork = process.env.TEST_NETWORK || "localhost";
 var geoserver;
 
-module.exports = {
+export default {
   startGeoserver: function(done) {
     geoserver = geoServer.listen(9002, "0.0.0.0", done);
   },
@@ -82,5 +82,5 @@ module.exports = {
       }
     }
   }
-}
+};
 

@@ -1,7 +1,7 @@
-const cors       = require("cors");
-const express    = require("express");
-const fs         = require("fs");
-const sourceData = require("./sources");
+import cors from "cors";
+import express from "express";
+import fs from "fs";
+import sourceData from "./sources";
 
 
 var app = express();
@@ -95,4 +95,4 @@ app.get("/example-style.json", function(req, res) {
 })
 
 
-module.exports = app;
+export default app;

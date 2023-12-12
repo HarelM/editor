@@ -1,5 +1,5 @@
-var config = require("../../config/specs");
-var helper = require("../helper");
+import config from "../../config/specs";
+import helper from "../helper";
 
 
 describe("map", function() {
@@ -12,10 +12,7 @@ describe("map", function() {
       await browser.alertAccept();
 
       await browser.waitUntil(async function () {
-        return (
-          await browser.isVisible(".maplibregl-ctrl-zoom")
-          && await browser.getText(".maplibregl-ctrl-zoom") === "Zoom level: "+(zoomLevel)
-        );
+        return ((await browser.isVisible(".maplibregl-ctrl-zoom")) && (await browser.getText(".maplibregl-ctrl-zoom")) === "Zoom level: "+(zoomLevel));
       }, 10*1000)
     })
     it("via map controls", async function() {

@@ -1,6 +1,6 @@
-var config    = require("../../config/specs");
-var helper    = require("../helper");
-var wd        = require("../../wd-helper");
+import config from "../../config/specs";
+import helper from "../helper";
+import wd from "../../wd-helper";
 
 
 // These will get used in the marketing material. They are also useful to do a quick manual check of the styling across browsers

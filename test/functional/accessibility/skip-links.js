@@ -1,7 +1,7 @@
-var assert = require("assert");
-var config = require("../../config/specs");
-var helper = require("../helper");
-var wd     = require("../../wd-helper");
+import assert from "assert";
+import config from "../../config/specs";
+import helper from "../helper";
+import wd from "../../wd-helper";
 
 
 describe("skip links", function() {

@@ -1,6 +1,6 @@
-var config      = require("../config/specs");
-var helper      = require("./helper");
-var extendWebdriverIO = require("./util/webdriverio-ext");
+import config from "../config/specs";
+import helper from "./helper";
+import extendWebdriverIO from "./util/webdriverio-ext";
 
 
 describe('maputnik', function() {

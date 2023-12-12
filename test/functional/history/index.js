@@ -1,6 +1,6 @@
-var assert = require("assert");
-var config = require("../../config/specs");
-var helper = require("../helper");
+import assert from "assert";
+import config from "../../config/specs";
+import helper from "../helper";
 
 
 

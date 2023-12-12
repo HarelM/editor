@@ -1,6 +1,6 @@
-var artifacts   = require("../../artifacts");
-var fs          = require("fs");
-var istanbulCov = require('istanbul-lib-coverage');
+import artifacts from "../../artifacts";
+import fs from "fs";
+import istanbulCov from 'istanbul-lib-coverage';
 
 var COVERAGE_PATH = artifacts.pathSync("/coverage");
 

@@ -1,5 +1,5 @@
-var path   = require("path");
-var mkdirp = require("mkdirp");
+import path from "path";
+import mkdirp from "mkdirp";
 
 
 function genPath(subPath) {
@@ -16,7 +16,7 @@ function genPath(subPath) {
   return buildPath;
 }
 
-module.exports.path = function(subPath) {
+export const path = function(subPath) {
   var dirPath = genPath(subPath);
 
   return new Promise(function(resolve, reject) {
@@ -29,11 +29,11 @@ module.exports.path = function(subPath) {
       }
     });
   });
-}
+};
 
-module.exports.pathSync = function(subPath) {
+export const pathSync = function(subPath) {
   var dirPath = genPath(subPath);
   mkdirp.sync(dirPath);
   return dirPath;
-}
+};
 

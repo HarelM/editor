@@ -1,5 +1,5 @@
-var assert = require("assert");
-var wd     = require("../../wd-helper");
+import assert from "assert";
+import wd from "../../wd-helper";
 
 
 describe("keyboard", function() {
