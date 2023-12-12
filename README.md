@@ -75,7 +75,7 @@ npm run lint-styles
 ```
 
 
-## Tests
+## Tests 
 For testing we use [webdriverio](https://webdriver.io) and [selenium-standalone](https://github.com/webdriverio/selenium-standalone).
 
 [selenium-standalone](https://github.com/webdriverio/selenium-standalone) starts a server that will launch browsers on your local machine. You need to have Java installed on your machine as well as *chrome* or *firefox*.
