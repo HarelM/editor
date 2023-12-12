@@ -1,14 +1,14 @@
-var webpack          = require("webpack");
-var WebpackDevServer = require("webpack-dev-server");
-var webpackConfig    = require("./webpack.config");
-var testConfig       = require("../test/config/specs");
-var artifacts        = require("../test/artifacts");
+import webpack from "webpack";
+import WebpackDevServer from "webpack-dev-server";
+import webpackConfig from "../../config/webpack.config";
+import testConfig from "./specs";
+import artifacts from "../artifacts";
 
 
 var server;
 var SCREENSHOT_PATH = artifacts.pathSync("screenshots");
 
-exports.config = {
+export const config = {
   runner: 'local',
   path: '/wd/hub',
 
