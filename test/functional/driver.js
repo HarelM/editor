@@ -1,6 +1,7 @@
 var config = require("../config/specs");
 var helper = require("./helper");
 var wd = require("../wd-helper");
+var fs = require("fs");
 
 const driver = {
     async setStyle(styleProperties) {
