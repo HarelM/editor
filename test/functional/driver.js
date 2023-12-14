@@ -46,7 +46,7 @@ const driver = {
       await browser.setValueSafe(selector, value);
     },
     getExampleFilePath() {
-      return __dirname + "/../../example-style.json";
+      return __dirname + "/../example-style.json";
     },
     async getExampleFileData() {
       var styleFilePath = this.getExampleFilePath();
