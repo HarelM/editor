@@ -7,7 +7,7 @@ const driver = {
       if (styleProperties) {
         url += "&style=" + helper.getStyleUrl(styleProperties);
       }
-      await browser.url();
+      await browser.url(url);
       await browser.acceptAlert();
       await this.waitForExist(".maputnik-toolbar-link");
       await this.zeroTimeout();
