@@ -21,6 +21,10 @@ const driver = {
     },
     async typeKeys(keys) {
       await browser.keys(keys)
+    },
+    async click(selector) {
+      const elem = await $(selector);
+      await elem.click();
     }
 }
 module.exports = driver;

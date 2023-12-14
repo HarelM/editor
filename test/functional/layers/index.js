@@ -1,21 +1,17 @@
 var assert = require("assert");
 var config = require("../../config/specs");
 var helper = require("../helper");
+var driver = require("../driver");
 var {v1: uuid} = require('uuid');
 var wd     = require("../../wd-helper");
 
 
 describe("layers", function() {
   beforeEach(async function() {
-    await browser.url(config.baseUrl+"?debug&style="+helper.getStyleUrl([
+    driver.setStyle([
       "geojson:example",
       "raster:raster"
-    ]));
-    await browser.acceptAlert();
-    const elem = await $(".maputnik-toolbar-link");
-    await elem.waitForExist();
-    await browser.flushReactUpdates();
-
+    ]);
     await helper.modal.addLayer.open();
   });
 
@@ -34,8 +30,7 @@ describe("layers", function() {
         },
       ]);
 
-      const elem = await $(wd.$("layer-list-item:"+id+":delete", ""));
-      await elem.click();
+      await driver.click(wd.$("layer-list-item:"+id+":delete", ""))
 
       styleObj = await helper.getStyleStore(browser);
       assert.deepEqual(styleObj.layers, [
@@ -56,8 +51,7 @@ describe("layers", function() {
         },
       ]);
 
-      const elem = await $(wd.$("layer-list-item:"+id+":copy", ""));
-      await elem.click();
+      await driver.click(wd.$("layer-list-item:"+id+":copy", ""));
 
       styleObj = await helper.getStyleStore(browser);
       assert.deepEqual(styleObj.layers, [
@@ -86,8 +80,7 @@ describe("layers", function() {
         },
       ]);
 
-      const elem = await $(wd.$("layer-list-item:"+id+":toggle-visibility", ""));
-      await elem.click();
+      await driver.click(wd.$("layer-list-item:"+id+":toggle-visibility", ""));
 
       styleObj = await helper.getStyleStore(browser);
       assert.deepEqual(styleObj.layers, [
@@ -100,6 +93,7 @@ describe("layers", function() {
         },
       ]);
 
+      await driver.click(wd.$("layer-list-item:"+id+":toggle-visibility", ""));
       await elem.click();
 
       styleObj = await helper.getStyleStore(browser);
