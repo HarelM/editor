@@ -1,51 +1,43 @@
 var assert = require("assert");
-var config = require("../../config/specs");
-var helper = require("../helper");
 var wd     = require("../../wd-helper");
+var driver = require("../driver");
 
 
 describe("skip links", function() {
   beforeEach(async function () {
-    await browser.url(config.baseUrl+"?debug&style="+helper.getGeoServerUrl("example-layer-style.json"));
-    await browser.acceptAlert();
+    await driver.setStyle("example-layer-style.json");
   });
 
   it("skip link to layer list", async function() {
     const selector = wd.$("root:skip:layer-list")
-    const elem = await $(selector);
-    assert(await elem.isExisting());
-    await browser.keys(['Tab']);
-    assert(await elem.isFocused());
-    await elem.click();
+    assert(await driver.isExisting(selector));
+    await driver.typeKeys(['Tab']);
+    assert(await driver.isFocused(selector));
+    await driver.click(selector);
 
-    const targetEl = await $("#skip-target-layer-list");
-    assert(await targetEl.isFocused());
+    assert(await driver.isFocused("#skip-target-layer-list"));
   });
 
   it("skip link to layer editor", async function() {
     const selector = wd.$("root:skip:layer-editor")
-    const elem = await $(selector);
-    assert(await elem.isExisting());
-    await browser.keys(['Tab']);
-    await browser.keys(['Tab']);
-    assert(await elem.isFocused());
-    await elem.click();
+    assert(await driver.isExisting(selector));
+    await driver.typeKeys(['Tab']);
+    await driver.typeKeys(['Tab']);
+    assert(await driver.isFocused(selector));
+    await driver.click(selector);
 
-    const targetEl = await $("#skip-target-layer-editor");
-    assert(await targetEl.isFocused());
+    assert(await driver.isFocused("#skip-target-layer-editor"));
   });
 
   it("skip link to map view", async function() {
     const selector = wd.$("root:skip:map-view")
-    const elem = await $(selector);
-    assert(await elem.isExisting());
-    await browser.keys(['Tab']);
-    await browser.keys(['Tab']);
-    await browser.keys(['Tab']);
-    assert(await elem.isFocused());
-    await elem.click();
+    assert(await driver.isExisting(selector));
+    await driver.typeKeys(['Tab']);
+    await driver.typeKeys(['Tab']);
+    await driver.typeKeys(['Tab']);
+    assert(await driver.isFocused(selector));
+    await driver.click(selector);
 
-    const targetEl = await $(".maplibregl-canvas");
-    assert(await targetEl.isFocused());
+    assert(await driver.isFocused(".maplibregl-canvas"));
   });
 });

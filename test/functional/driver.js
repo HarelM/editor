@@ -6,8 +6,10 @@ var fs = require("fs");
 const driver = {
     async setStyle(styleProperties) {
       let url = config.baseUrl+"?debug";
-      if (styleProperties) {
+      if (styleProperties && Array.isArray(styleProperties)) {
         url += "&style=" + helper.getStyleUrl(styleProperties);
+      } else if (styleProperties && typeof styleProperties === "string") {
+        url += "&style=" + helper.getGeoServerUrl(styleProperties);
       }
       await browser.url(url);
       if (styleProperties) {
