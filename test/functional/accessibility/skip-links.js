@@ -2,6 +2,7 @@ var assert = require("assert");
 var wd     = require("../../wd-helper");
 var driver = require("../driver");
 var config = require("../../config/specs");
+var helper = require("../helper");
 
 
 describe("skip links", function() {
