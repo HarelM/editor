@@ -29,6 +29,9 @@ const driver = {
     async isDisplayedInViewport(selector) {
       const elem = await $(selector);
       return elem.isDisplayedInViewport();
+    },
+    async setValue(selector, value) {
+      await browser.setValueSafe(selector, value);
     }
 }
 module.exports = driver;

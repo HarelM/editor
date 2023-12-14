@@ -133,7 +133,7 @@ describe("layers", function() {
         const selectBox = await $(wd.$("add-layer.layer-type", "select"));
         await selectBox.selectByAttribute('value', "background");
         await browser.flushReactUpdates();
-        await browser.setValueSafe(wd.$("add-layer.layer-id", "input"), "background:"+id);
+        await driver.setValue(wd.$("add-layer.layer-id", "input"), "background:"+id);
 
         await driver.click(wd.$("add-layer"));
 
@@ -156,7 +156,7 @@ describe("layers", function() {
           await driver.click(wd.$("layer-list-item:background:"+bgId));
 
           var id = uuid();
-          await browser.setValueSafe(wd.$("layer-editor.layer-id", "input"), "foobar:"+id)
+          await driver.setValue(wd.$("layer-editor.layer-id", "input"), "foobar:"+id)
           await driver.click(wd.$("min-zoom"));
 
           var styleObj = await helper.getStyleStore(browser);
@@ -172,7 +172,7 @@ describe("layers", function() {
           var bgId = await createBackground();
 
           await driver.click(wd.$("layer-list-item:background:"+bgId));
-          await browser.setValueSafe(wd.$("min-zoom", 'input[type="text"]'), 1)
+          await driver.setValue(wd.$("min-zoom", 'input[type="text"]'), 1)
 
           await driver.click(wd.$("layer-editor.layer-id", "input"));
 
@@ -186,8 +186,8 @@ describe("layers", function() {
           ]);
 
           // AND RESET!
-          // await browser.setValueSafe(wd.$("min-zoom", "input"), "")
-          // await browser.click(wd.$("max-zoom", "input"));
+          // await driver.setValue(wd.$("min-zoom", "input"), "")
+          // await driver.click(wd.$("max-zoom", "input"));
 
           // var styleObj = await helper.getStyleStore(browser);
 
@@ -203,7 +203,7 @@ describe("layers", function() {
           var bgId = await createBackground();
 
           await driver.click(wd.$("layer-list-item:background:"+bgId));
-          await browser.setValueSafe(wd.$("max-zoom", 'input[type="text"]'), 1)
+          await driver.setValue(wd.$("max-zoom", 'input[type="text"]'), 1)
 
           await driver.click(wd.$("layer-editor.layer-id", "input"));
 
@@ -222,7 +222,7 @@ describe("layers", function() {
           var id = uuid();
 
           await driver.click(wd.$("layer-list-item:background:"+bgId));
-          await browser.setValueSafe(wd.$("layer-comment", "textarea"), id);
+          await driver.setValue(wd.$("layer-comment", "textarea"), id);
 
           await driver.click(wd.$("layer-editor.layer-id", "input"));
 
@@ -239,8 +239,8 @@ describe("layers", function() {
 
           // Unset it again.
           // TODO: This fails
-          // await browser.setValueSafe(wd.$("layer-comment", "textarea"), "");
-          // await browser.click(wd.$("min-zoom", "input"));
+          // await driver.setValue(wd.$("layer-comment", "textarea"), "");
+          // await driver.click(wd.$("min-zoom", "input"));
           // await browser.flushReactUpdates();
 
           // var styleObj = await helper.getStyleStore(browser);
@@ -258,7 +258,6 @@ describe("layers", function() {
           await driver.click(wd.$("layer-list-item:background:"+bgId));
 
           await driver.click(wd.$("spec-field:background-color", "input"));
-          // await browser.debug();
 
           var styleObj = await helper.getStyleStore(browser);
           assert.deepEqual(styleObj.layers, [
@@ -311,7 +310,6 @@ describe("layers", function() {
 
   describe('fill', function () {
     it("add", async function() {
-      // await browser.debug();
 
       var id = await helper.modal.addLayer.fill({
         type: "fill",
@@ -431,10 +429,7 @@ describe("layers", function() {
 
   describe("groups", function() {
     it("simple", async function() {
-      await browser.url(config.baseUrl+"?debug&style="+helper.getStyleUrl([
-        "geojson:example"
-      ]));
-      await browser.acceptAlert(); 
+      await driver.setStyle(["geojson:example"]);
 
       await helper.modal.addLayer.open();
       await helper.modal.addLayer.fill({
