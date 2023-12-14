@@ -3,25 +3,7 @@ var fs     = require("fs");
 var wd     = require("../../wd-helper");
 var config = require("../../config/specs");
 var helper = require("../helper");
-
-
-async function closeModal(wdKey) {
-  const selector = wd.$(wdKey);
-
-  await browser.waitUntil(async function() {
-    const elem = await $(selector);
-    return await elem.isDisplayedInViewport();
-  });
-
-  const closeBtnSelector = await $(wd.$(wdKey+".close-modal"));
-  await closeBtnSelector.click();
-
-  await browser.waitUntil(async function() {
-    return await browser.execute((selector) => {
-      return !document.querySelector(selector);
-    }, selector);
-  });
-}
+var driver = require("../driver");
 
 describe("modals", function() {
   describe("open", function() {
@@ -29,19 +11,14 @@ describe("modals", function() {
     var styleFileData = JSON.parse(fs.readFileSync(styleFilePath));
 
     beforeEach(async function() {
-      await browser.url(config.baseUrl+"?debug");
 
-      const elem = await $(".maputnik-toolbar-link");
-      await elem.waitForExist();
-      await browser.flushReactUpdates();
-
-      const elem2 = await $(wd.$("nav:open"));
-      await elem2.click();
-      await browser.flushReactUpdates();
+      await driver.setStyle();
+      await driver.click(wd.$("nav:open"));
+      await driver.zeroTimeout();
     });
 
     it("close", async function() {
-      await closeModal("modal:open");
+      await driver.closeModal("modal:open");
     });
 
     // "chooseFile" command currently not available for wdio v5 https://github.com/webdriverio/webdriverio/pull/3632
@@ -57,10 +34,9 @@ describe("modals", function() {
     it("load from url", async function() {
       var styleFileUrl  = helper.getGeoServerUrl("example-style.json");
 
-      await browser.setValueSafe(wd.$("modal:open.url.input"), styleFileUrl);
+      await driver.setValue(wd.$("modal:open.url.input"), styleFileUrl);
 
-      const selector = await $(wd.$("modal:open.url.button"));
-      await selector.click();
+      await driver.click(wd.$("modal:open.url.button"))
 
       // Allow the network request to happen
       // NOTE: Its localhost so this should be fast.
@@ -69,25 +45,18 @@ describe("modals", function() {
       var styleObj = await helper.getStyleStore(browser);
       assert.deepEqual(styleFileData, styleObj);
     });
-
-    // TODO: Need to work out how to mock out the end points
-    it("gallery")
   })
 
   describe("shortcuts", function() {
     it("open/close", async function() {
-      await browser.url(config.baseUrl+"?debug");
+      await driver.setStyle();
 
-      const elem = await $(".maputnik-toolbar-link");
-      await elem.waitForExist();
-      await browser.flushReactUpdates();
-
-      await browser.keys(["?"]);
+      await driver.keys(["?"]);
 
       const modalEl = await $(wd.$("modal:shortcuts"))
       assert(await modalEl.isDisplayed());
 
-      await closeModal("modal:shortcuts");
+      await driver.closeModal("modal:shortcuts");
     });
 
   });
@@ -95,19 +64,13 @@ describe("modals", function() {
   describe("export", function() {
 
     beforeEach(async function() {
-      await browser.url(config.baseUrl+"?debug");
-
-      const elem = await $(".maputnik-toolbar-link");
-      await elem.waitForExist();
-      await browser.flushReactUpdates();
-
-      const elem2 = await $(wd.$("nav:export"));
-      await elem2.click();
-      await browser.flushReactUpdates();
+      await driver.setStyle();
+      await driver.click(wd.$("nav:export"));
+      await driver.zeroTimeout();
     });
 
     it("close", async function() {
-      await closeModal("modal:export");
+      await driver.closeModal("modal:export");
     });
 
     // TODO: Work out how to download a file and check the contents
@@ -123,62 +86,48 @@ describe("modals", function() {
 
   describe("inspect", function() {
     it("toggle", async function() {
-      await browser.url(config.baseUrl+"?debug&style="+helper.getStyleUrl([
-        "geojson:example"
-      ]));
-      await browser.acceptAlert();
+      await driver.setStyle(["geojson:example"]);
 
-      const selectBox = await $(wd.$("nav:inspect", "select"));
-      await selectBox.selectByAttribute('value', "inspect");
+      await driver.selectFromDropdown(wd.$("nav:inspect", "select"), "inspect");
     })
   })
 
   describe("style settings", function() {
     beforeEach(async function() {
-      await browser.url(config.baseUrl+"?debug");
-
-      const elem = await $(".maputnik-toolbar-link");
-      await elem.waitForExist();
-      await browser.flushReactUpdates();
-
-      const elem2 = await $(wd.$("nav:settings"));
-      await elem2.click();
-      await browser.flushReactUpdates();
+      await driver.setStyle();
+      await driver.click(wd.$("nav:settings"));
+      await driver.zeroTimeout();
     });
 
     it("name", async function() {
-      await browser.setValueSafe(wd.$("modal:settings.name"), "foobar")
-      const elem = await $(wd.$("modal:settings.owner"));
-      await elem.click();
-      await browser.flushReactUpdates();
+      await driver.setValue(wd.$("modal:settings.name"), "foobar");
+      await driver.click(wd.$("modal:settings.owner"));
+      await driver.zeroTimeout();
 
       var styleObj = await helper.getStyleStore(browser);
       assert.equal(styleObj.name, "foobar");
     })
     it("owner", async function() {
-      await browser.setValueSafe(wd.$("modal:settings.owner"), "foobar")
-      const elem = await $(wd.$("modal:settings.name"));
-      await elem.click();
-      await browser.flushReactUpdates();
+      await driver.setValue(wd.$("modal:settings.owner"), "foobar")
+      await driver.click(wd.$("modal:settings.name"));
+      await driver.zeroTimeout();
 
       var styleObj = await helper.getStyleStore(browser);
       assert.equal(styleObj.owner, "foobar");
     })
     it("sprite url", async function() {
-      await browser.setValueSafe(wd.$("modal:settings.sprite"), "http://example.com")
-      const elem = await $(wd.$("modal:settings.name"));
-      await elem.click();
-      await browser.flushReactUpdates();
+      await driver.setValue(wd.$("modal:settings.sprite"), "http://example.com")
+      await driver.click(wd.$("modal:settings.name"));
+      await driver.zeroTimeout();
 
       var styleObj = await helper.getStyleStore(browser);
       assert.equal(styleObj.sprite, "http://example.com");
     })
     it("glyphs url", async function() {
       var glyphsUrl = "http://example.com/{fontstack}/{range}.pbf"
-      await browser.setValueSafe(wd.$("modal:settings.glyphs"), glyphsUrl)
-      const elem = await $(wd.$("modal:settings.name"));
-      await elem.click();
-      await browser.flushReactUpdates();
+      await driver.setValue(wd.$("modal:settings.glyphs"), glyphsUrl);
+      await driver.click(wd.$("modal:settings.name"));
+      await driver.zeroTimeout();
 
       var styleObj = await helper.getStyleStore(browser);
       assert.equal(styleObj.glyphs, glyphsUrl);
@@ -186,10 +135,9 @@ describe("modals", function() {
 
     it("maptiler access token", async function() {
       var apiKey = "testing123";
-      await browser.setValueSafe(wd.$("modal:settings.maputnik:openmaptiles_access_token"), apiKey);
-      const elem = await $(wd.$("modal:settings.name"));
-      await elem.click();
-      await browser.flushReactUpdates();
+      await driver.setValue(wd.$("modal:settings.maputnik:openmaptiles_access_token"), apiKey);
+      await driver.click(wd.$("modal:settings.name"));
+      await driver.zeroTimeout();
 
       var styleObj = await helper.getStyleStore(browser);
       assert.equal(styleObj.metadata["maputnik:openmaptiles_access_token"], apiKey);
@@ -197,21 +145,18 @@ describe("modals", function() {
 
     it("thunderforest access token", async function() {
       var apiKey = "testing123";
-      await browser.setValueSafe(wd.$("modal:settings.maputnik:thunderforest_access_token"), apiKey);
-      const elem = await $(wd.$("modal:settings.name"));
-      await elem.click();
-      await browser.flushReactUpdates();
+      await driver.setValue(wd.$("modal:settings.maputnik:thunderforest_access_token"), apiKey);
+      await driver.click(wd.$("modal:settings.name"));
+      await driver.zeroTimeout();
 
       var styleObj = await helper.getStyleStore(browser);
       assert.equal(styleObj.metadata["maputnik:thunderforest_access_token"], apiKey);
     })
 
     it("style renderer", async function() {
-      const selector = await $(wd.$("modal:settings.maputnik:renderer"));
-      await selector.selectByAttribute('value', "ol");
-      const elem = await $(wd.$("modal:settings.name"));
-      await elem.click();
-      await browser.flushReactUpdates();
+      await driver.selectFromDropdown(wd.$("modal:settings.maputnik:renderer"), "ol");
+      await driver.click(wd.$("modal:settings.name"));
+      await driver.zeroTimeout();
 
       var styleObj = await helper.getStyleStore(browser);
       assert.equal(styleObj.metadata["maputnik:renderer"], "ol");

@@ -3,10 +3,14 @@ var helper = require("./helper");
 
 const driver = {
     async setStyle(styleProperties) {
-        await browser.url(config.baseUrl+"?debug&style="+helper.getStyleUrl(styleProperties));
-        await browser.acceptAlert();
-        await this.waitForExist(".maputnik-toolbar-link");
-        await this.zeroTimeout();
+      const url = config.baseUrl+"?debug";
+      if (styleProperties) {
+        url += "&style=" + helper.getStyleUrl(styleProperties);
+      }
+      await browser.url();
+      await browser.acceptAlert();
+      await this.waitForExist(".maputnik-toolbar-link");
+      await this.zeroTimeout();
     },
     async setSurvey() {
       await browser.execute(function() {
@@ -46,6 +50,22 @@ const driver = {
     async waitForExist(selector) {
       const elem = await $(selector);
       await elem.waitForExist();
+    },
+    async closeModal(wdKey) {
+      const selector = wd.$(wdKey);
+    
+      await browser.waitUntil(async function() {
+        const elem = await $(selector);
+        return await elem.isDisplayedInViewport();
+      });
+    
+      await this.click(wd.$(wdKey+".close-modal"));
+    
+      await browser.waitUntil(async function() {
+        return await browser.execute((selector) => {
+          return !document.querySelector(selector);
+        }, selector);
+      });
     }
 }
 module.exports = driver;
