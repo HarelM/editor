@@ -1,5 +1,5 @@
 var config = require("../config/specs");
-var helper = require("./util/helper");
+var helper = require("./helper");
 
 const driver = {
     async setStyle(styleProperties) {
