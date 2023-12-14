@@ -1,4 +1,3 @@
-var helper      = require("./helper");
 var driver      = require("./driver");
 var extendWebdriverIO = require("./util/webdriverio-ext");
 
@@ -6,11 +5,11 @@ describe('maputnik', function() {
 
   before(async function(done) {
     await extendWebdriverIO();
-    helper.startGeoserver(done);
+    driver.geoserver.start(done);
   });
 
   after(function(done) {
-    helper.stopGeoserver(done);
+    driver.geoserver.stop(done);
   });
 
   beforeEach(async function() {

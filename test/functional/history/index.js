@@ -1,7 +1,5 @@
 var assert = require("assert");
-var helper = require("../helper");
 var driver = require("../driver");
-
 
 describe("history", function() {
   let undoKeyCombo;
@@ -24,17 +22,17 @@ describe("history", function() {
     var styleObj;
 
     await driver.setStyle(["geojson:example"])
-    await helper.modal.addLayer.open();
+    await driver.openLayersModal();
 
-    styleObj = await helper.getStyleStore(browser);
+    styleObj = await driver.getStyleStore();
     assert.deepEqual(styleObj.layers, []);
 
-    await helper.modal.addLayer.fill({
+    await driver.fillLayersModal({
       id: "step 1",
       type: "background"
     })
 
-    styleObj = await helper.getStyleStore(browser);
+    styleObj = await driver.getStyleStore();
     assert.deepEqual(styleObj.layers, [
       {
         "id": "step 1",
@@ -42,13 +40,13 @@ describe("history", function() {
       }
     ]);
 
-    await helper.modal.addLayer.open();
-    await helper.modal.addLayer.fill({
+    await driver.openLayersModal();
+    await driver.fillLayersModal({
       id: "step 2",
       type: "background"
     })
 
-    styleObj = await helper.getStyleStore(browser);
+    styleObj = await driver.getStyleStore();
     assert.deepEqual(styleObj.layers, [
       {
         "id": "step 1",
@@ -62,7 +60,7 @@ describe("history", function() {
 
     await driver.typeKeys(undoKeyCombo);
     await driver.typeKeys(undoKeyComboReset);
-    styleObj = await helper.getStyleStore(browser);
+    styleObj = await driver.getStyleStore();
     assert.deepEqual(styleObj.layers, [
       {
         "id": "step 1",
@@ -72,13 +70,13 @@ describe("history", function() {
 
     await driver.typeKeys(undoKeyCombo)
     await driver.typeKeys(undoKeyComboReset);
-    styleObj = await helper.getStyleStore(browser);
+    styleObj = await driver.getStyleStore();
     assert.deepEqual(styleObj.layers, [
     ]);
 
     await driver.typeKeys(redoKeyCombo)
     await driver.typeKeys(redoKeyComboReset);
-    styleObj = await helper.getStyleStore(browser);
+    styleObj = await driver.getStyleStore();
     assert.deepEqual(styleObj.layers, [
       {
         "id": "step 1",
@@ -88,7 +86,7 @@ describe("history", function() {
 
     await driver.typeKeys(redoKeyCombo)
     await driver.typeKeys(redoKeyComboReset);
-    styleObj = await helper.getStyleStore(browser);
+    styleObj = await driver.getStyleStore();
     assert.deepEqual(styleObj.layers, [
       {
         "id": "step 1",

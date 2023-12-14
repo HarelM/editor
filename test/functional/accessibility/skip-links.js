@@ -1,15 +1,11 @@
 var assert = require("assert");
 var wd     = require("../../wd-helper");
 var driver = require("../driver");
-var config = require("../../config/specs");
-var helper = require("../helper");
 
 
 describe("skip links", function() {
   beforeEach(async function () {
-    await browser.url(config.baseUrl+"?debug&style="+helper.getGeoServerUrl("example-layer-style.json"));
-    await browser.acceptAlert();
-    //await driver.setStyle("example-layer-style.json");
+    await driver.setStyle("example-layer-style.json");
   });
 
   it("skip link to layer list", async function() {

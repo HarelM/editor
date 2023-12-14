@@ -1,6 +1,5 @@
 var assert = require('assert');
 var wd     = require("../../wd-helper");
-var helper = require("../helper");
 var driver = require("../driver");
 
 describe("modals", function() {
@@ -20,12 +19,12 @@ describe("modals", function() {
     it.skip("upload", async function() {
       await driver.chooseExampleFile();
 
-      var styleObj = await helper.getStyleStore(browser);
+      var styleObj = await driver.getStyleStore();
       assert.deepEqual(await driver.getExampleFileData(), styleObj);
     });
 
     it("load from url", async function() {
-      var styleFileUrl  = helper.getGeoServerUrl("example-style.json");
+      var styleFileUrl = driver.getGeoServerUrl("example-style.json");
 
       await driver.setValue(wd.$("modal:open.url.input"), styleFileUrl);
 
@@ -35,7 +34,7 @@ describe("modals", function() {
       // NOTE: Its localhost so this should be fast.
       await driver.sleep(300);
 
-      var styleObj = await helper.getStyleStore(browser);
+      var styleObj = await driver.getStyleStore();
       assert.deepEqual(await driver.getExampleFileData(), styleObj);
     });
   })
@@ -97,7 +96,7 @@ describe("modals", function() {
       await driver.click(wd.$("modal:settings.owner"));
       await driver.zeroTimeout();
 
-      var styleObj = await helper.getStyleStore(browser);
+      var styleObj = await driver.getStyleStore();
       assert.equal(styleObj.name, "foobar");
     })
     it("owner", async function() {
@@ -105,7 +104,7 @@ describe("modals", function() {
       await driver.click(wd.$("modal:settings.name"));
       await driver.zeroTimeout();
 
-      var styleObj = await helper.getStyleStore(browser);
+      var styleObj = await driver.getStyleStore();
       assert.equal(styleObj.owner, "foobar");
     })
     it("sprite url", async function() {
@@ -113,7 +112,7 @@ describe("modals", function() {
       await driver.click(wd.$("modal:settings.name"));
       await driver.zeroTimeout();
 
-      var styleObj = await helper.getStyleStore(browser);
+      var styleObj = await driver.getStyleStore();
       assert.equal(styleObj.sprite, "http://example.com");
     })
     it("glyphs url", async function() {
@@ -122,7 +121,7 @@ describe("modals", function() {
       await driver.click(wd.$("modal:settings.name"));
       await driver.zeroTimeout();
 
-      var styleObj = await helper.getStyleStore(browser);
+      var styleObj = await driver.getStyleStore();
       assert.equal(styleObj.glyphs, glyphsUrl);
     })
 
@@ -132,7 +131,7 @@ describe("modals", function() {
       await driver.click(wd.$("modal:settings.name"));
       await driver.zeroTimeout();
 
-      var styleObj = await helper.getStyleStore(browser);
+      var styleObj = await driver.getStyleStore();
       assert.equal(styleObj.metadata["maputnik:openmaptiles_access_token"], apiKey);
     })
 
@@ -142,7 +141,7 @@ describe("modals", function() {
       await driver.click(wd.$("modal:settings.name"));
       await driver.zeroTimeout();
 
-      var styleObj = await helper.getStyleStore(browser);
+      var styleObj = await driver.getStyleStore();
       assert.equal(styleObj.metadata["maputnik:thunderforest_access_token"], apiKey);
     })
 
@@ -151,7 +150,7 @@ describe("modals", function() {
       await driver.click(wd.$("modal:settings.name"));
       await driver.zeroTimeout();
 
-      var styleObj = await helper.getStyleStore(browser);
+      var styleObj = await driver.getStyleStore();
       assert.equal(styleObj.metadata["maputnik:renderer"], "ol");
     })
   })

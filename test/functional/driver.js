@@ -1,7 +1,6 @@
 var {v1: uuid} = require('uuid');
 var fs = require("fs");
 var config = require("../config/specs");
-var helper = require("./helper");
 var wd = require("../wd-helper");
 var geoServer = require("../geojson-server");
 
@@ -28,12 +27,15 @@ const driver = {
       return "http://"+testNetwork+":"+port+"/"+urlPath;
     },
 
-    async setStyle(styleProperties) {
-      let url = config.baseUrl+"?debug";
+    async setStyle(styleProperties, zoom) {
+      let url = config.baseUrl + "?debug";
       if (styleProperties && Array.isArray(styleProperties)) {
-        url += "&style=" + helper.getStyleUrl(styleProperties);
+        url += "&style=" + this.getStyleUrl(styleProperties);
       } else if (styleProperties && typeof styleProperties === "string") {
-        url += "&style=" + helper.getGeoServerUrl(styleProperties);
+        url += "&style=" + this.getGeoServerUrl(styleProperties);
+      }
+      if (zoom) {
+        url += "#" + zoom + "/41.3805/2.1635";
       }
       await browser.url(url);
       if (styleProperties) {
