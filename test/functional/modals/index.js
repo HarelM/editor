@@ -1,14 +1,10 @@
 var assert = require('assert');
-var fs     = require("fs");
 var wd     = require("../../wd-helper");
 var helper = require("../helper");
 var driver = require("../driver");
 
 describe("modals", function() {
   describe("open", function() {
-    var styleFilePath = __dirname+"/../../example-style.json";
-    var styleFileData = JSON.parse(fs.readFileSync(styleFilePath));
-
     beforeEach(async function() {
 
       await driver.setStyle();
@@ -22,12 +18,10 @@ describe("modals", function() {
 
     // "chooseFile" command currently not available for wdio v5 https://github.com/webdriverio/webdriverio/pull/3632
     it.skip("upload", async function() {
-      const elem = await $("*[type='file']");
-      await elem.waitForExist();
-      await browser.chooseFile("*[type='file']", styleFilePath);
+      await driver.chooseExampleFile();
 
       var styleObj = await helper.getStyleStore(browser);
-      assert.deepEqual(styleFileData, styleObj);
+      assert.deepEqual(await driver.getExampleFileData(), styleObj);
     });
 
     it("load from url", async function() {
@@ -39,10 +33,10 @@ describe("modals", function() {
 
       // Allow the network request to happen
       // NOTE: Its localhost so this should be fast.
-      await browser.pause(300);
+      await driver.sleep(300);
 
       var styleObj = await helper.getStyleStore(browser);
-      assert.deepEqual(styleFileData, styleObj);
+      assert.deepEqual(await driver.getExampleFileData(), styleObj);
     });
   })
 
@@ -50,7 +44,7 @@ describe("modals", function() {
     it("open/close", async function() {
       await driver.setStyle();
 
-      await driver.keys(["?"]);
+      await driver.typeKeys(["?"]);
 
       const modalEl = await $(wd.$("modal:shortcuts"))
       assert(await modalEl.isDisplayed());

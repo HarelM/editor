@@ -69,6 +69,9 @@ const driver = {
       const elem = await $(selector);
       await elem.waitForExist();
     },
+    async takeScreenShot(fileName) {
+      await browser.takeScreenShot(fileName);
+    },
     async closeModal(wdKey) {
       const selector = wd.$(wdKey);
     
