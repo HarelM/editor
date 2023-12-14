@@ -1,9 +1,33 @@
+var {v1: uuid} = require('uuid');
+var fs = require("fs");
 var config = require("../config/specs");
 var helper = require("./helper");
 var wd = require("../wd-helper");
-var fs = require("fs");
+var geoServer = require("../geojson-server");
+
+var testNetwork = process.env.TEST_NETWORK || "localhost";
+var geoserver;
+
 
 const driver = {
+    geoserver: {
+      start(done) {
+        geoserver = geoServer.listen(9002, "0.0.0.0", done);
+      },
+      stop(done) {
+        geoserver.close(done);
+        geoserver = undefined;
+      },
+    },
+    getStyleUrl(styles) {
+      var port = geoserver.address().port;
+      return "http://"+testNetwork+":"+port+"/styles/empty/"+styles.join(",");
+    },
+    getGeoServerUrl(urlPath) {
+      var port = geoserver.address().port;
+      return "http://"+testNetwork+":"+port+"/"+urlPath;
+    },
+
     async setStyle(styleProperties) {
       let url = config.baseUrl+"?debug";
       if (styleProperties && Array.isArray(styleProperties)) {
@@ -17,6 +41,11 @@ const driver = {
       }
       await this.waitForExist(".maputnik-toolbar-link");
       await this.zeroTimeout();
+    },
+    async getStyleStore() {
+      return await browser.executeAsync(function(done) {
+        window.debug.get("maputnik", "styleStore").latestStyle(done);
+      });
     },
     async setSurvey() {
       await browser.execute(function() {
@@ -71,7 +100,7 @@ const driver = {
     },
     async isExisting(selector) {
       const elem = await $(selector);
-      await elem.isExisting();
+      return elem.isExisting();
     },
     async waitForExist(selector) {
       const elem = await $(selector);
@@ -83,6 +112,48 @@ const driver = {
     async takeScreenShot(fileName) {
       await browser.takeScreenShot(fileName);
     },
+    async openLayersModal() {
+      const selector = await $(wd.$('layer-list:add-layer'));
+      await selector.click();
+
+      // Wait for events
+      await browser.flushReactUpdates();
+
+      const elem = await $(wd.$('modal:add-layer'));
+      await elem.waitForExist();
+      await elem.isDisplayed();
+      await elem.isDisplayedInViewport();
+
+      // Wait for events
+      await browser.flushReactUpdates();
+    },
+    async fillLayersModal(opts) {
+      var type = opts.type;
+      var layer = opts.layer;
+      var id;
+      if(opts.id) {
+        id = opts.id
+      }
+      else {
+        id = type+":"+uuid();
+      }
+
+      const selectBox = await $(wd.$("add-layer.layer-type", "select"));
+      await selectBox.selectByAttribute('value', type);
+      await browser.flushReactUpdates();
+
+      await browser.setValueSafe(wd.$("add-layer.layer-id", "input"), id);
+      if(layer) {
+        await browser.setValueSafe(wd.$("add-layer.layer-source-block", "input"), layer);
+      }
+
+      await browser.flushReactUpdates();
+      const elem_addLayer = await $(wd.$("add-layer"));
+      await elem_addLayer.click();
+
+      return id;
+    },
+
     async closeModal(wdKey) {
       const selector = wd.$(wdKey);
     
