@@ -94,7 +94,6 @@ describe("layers", function() {
       ]);
 
       await driver.click(wd.$("layer-list-item:"+id+":toggle-visibility", ""));
-      await elem.click();
 
       styleObj = await helper.getStyleStore(browser);
       assert.deepEqual(styleObj.layers, [
@@ -107,12 +106,6 @@ describe("layers", function() {
         },
       ]);
     })
-  })
-
-  describe("tooltips", function() {
-  })
-
-  describe("help", function() {
   })
 
 
@@ -142,8 +135,7 @@ describe("layers", function() {
         await browser.flushReactUpdates();
         await browser.setValueSafe(wd.$("add-layer.layer-id", "input"), "background:"+id);
 
-        const elem = await $(wd.$("add-layer"));
-        await elem.click();
+        await driver.click(wd.$("add-layer"));
 
         var styleObj = await helper.getStyleStore(browser);
         assert.deepEqual(styleObj.layers, [
@@ -161,13 +153,11 @@ describe("layers", function() {
         it("id", async function() {
           var bgId = await createBackground();
 
-          const elem = await $(wd.$("layer-list-item:background:"+bgId));
-          await elem.click();
+          await driver.click(wd.$("layer-list-item:background:"+bgId));
 
           var id = uuid();
           await browser.setValueSafe(wd.$("layer-editor.layer-id", "input"), "foobar:"+id)
-          const elem2 = await $(wd.$("min-zoom"));
-          await elem2.click();
+          await driver.click(wd.$("min-zoom"));
 
           var styleObj = await helper.getStyleStore(browser);
           assert.deepEqual(styleObj.layers, [
@@ -181,11 +171,10 @@ describe("layers", function() {
         it("min-zoom", async function() {
           var bgId = await createBackground();
 
-          const elem = await $(wd.$("layer-list-item:background:"+bgId));
-          await elem.click();
+          await driver.click(wd.$("layer-list-item:background:"+bgId));
           await browser.setValueSafe(wd.$("min-zoom", 'input[type="text"]'), 1)
-          const elem2 = await $(wd.$("layer-editor.layer-id", "input"));
-          await elem2.click();
+
+          await driver.click(wd.$("layer-editor.layer-id", "input"));
 
           var styleObj = await helper.getStyleStore(browser);
           assert.deepEqual(styleObj.layers, [
@@ -213,11 +202,10 @@ describe("layers", function() {
         it("max-zoom", async function() {
           var bgId = await createBackground();
 
-          const elem = await $(wd.$("layer-list-item:background:"+bgId));
-          await elem.click();
+          await driver.click(wd.$("layer-list-item:background:"+bgId));
           await browser.setValueSafe(wd.$("max-zoom", 'input[type="text"]'), 1)
-          const elem2 = await $(wd.$("layer-editor.layer-id", "input"));
-          await elem2.click();
+
+          await driver.click(wd.$("layer-editor.layer-id", "input"));
 
           var styleObj = await helper.getStyleStore(browser);
           assert.deepEqual(styleObj.layers, [
@@ -233,11 +221,10 @@ describe("layers", function() {
           var bgId = await createBackground();
           var id = uuid();
 
-          const elem = await $(wd.$("layer-list-item:background:"+bgId));
-          await elem.click();
+          await driver.click(wd.$("layer-list-item:background:"+bgId));
           await browser.setValueSafe(wd.$("layer-comment", "textarea"), id);
-          const elem2 = await $(wd.$("layer-editor.layer-id", "input"));
-          await elem2.click();
+
+          await driver.click(wd.$("layer-editor.layer-id", "input"));
 
           var styleObj = await helper.getStyleStore(browser);
           assert.deepEqual(styleObj.layers, [
@@ -268,9 +255,9 @@ describe("layers", function() {
         it("color", null, async function() {
           var bgId = await createBackground();
 
-          await browser.click(wd.$("layer-list-item:background:"+bgId));
+          await driver.click(wd.$("layer-list-item:background:"+bgId));
 
-          await browser.click(wd.$("spec-field:background-color", "input"))
+          await driver.click(wd.$("spec-field:background-color", "input"));
           // await browser.debug();
 
           var styleObj = await helper.getStyleStore(browser);
