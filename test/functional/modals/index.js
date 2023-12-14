@@ -1,7 +1,6 @@
 var assert = require('assert');
 var fs     = require("fs");
 var wd     = require("../../wd-helper");
-var config = require("../../config/specs");
 var helper = require("../helper");
 var driver = require("../driver");
 

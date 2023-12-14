@@ -3,7 +3,7 @@ var helper = require("./helper");
 
 const driver = {
     async setStyle(styleProperties) {
-      const url = config.baseUrl+"?debug";
+      let url = config.baseUrl+"?debug";
       if (styleProperties) {
         url += "&style=" + helper.getStyleUrl(styleProperties);
       }
