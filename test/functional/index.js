@@ -1,8 +1,6 @@
-var config      = require("../config/specs");
 var helper      = require("./helper");
 var driver      = require("./driver");
 var extendWebdriverIO = require("./util/webdriverio-ext");
-
 
 describe('maputnik', function() {
 
@@ -16,10 +14,8 @@ describe('maputnik', function() {
   });
 
   beforeEach(async function() {
-    await driver.setStyle(["geojson:example","raster:raster"])
-    await browser.execute(function() {
-      localStorage.setItem("survey", true);
-    });
+    await driver.setStyle(["geojson:example","raster:raster"]);
+    await driver.setSurvey();
   });
 
   // -------- setup --------

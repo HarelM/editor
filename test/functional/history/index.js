@@ -1,7 +1,6 @@
 var assert = require("assert");
-var config = require("../../config/specs");
 var helper = require("../helper");
-
+var driver = require("../driver");
 
 
 describe("history", function() {
@@ -11,9 +10,7 @@ describe("history", function() {
   let redoKeyComboReset;
 
   before(async function() {
-    const isMac = await browser.execute(function() {
-      return navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-    });
+    const isMac = await driver.isMac();
     undoKeyCombo = ['Meta', 'z'];
     undoKeyComboReset = ['Meta'];
     redoKeyCombo = isMac ? ['Meta', 'Shift', 'z'] : ['Meta', 'y'];
@@ -26,11 +23,7 @@ describe("history", function() {
   it.skip("undo/redo", async function() {
     var styleObj;
 
-    await browser.url(config.baseUrl+"?debug&style="+helper.getStyleUrl([
-      "geojson:example"
-    ]));
-    await browser.acceptAlert();
-
+    await driver.setStyle(["geojson:example"])
     await helper.modal.addLayer.open();
 
     styleObj = await helper.getStyleStore(browser);
@@ -67,8 +60,8 @@ describe("history", function() {
       }
     ]);
 
-    await browser.keys(undoKeyCombo)
-    await browser.keys(undoKeyComboReset);
+    await driver.typeKeys(undoKeyCombo);
+    await driver.typeKeys(undoKeyComboReset);
     styleObj = await helper.getStyleStore(browser);
     assert.deepEqual(styleObj.layers, [
       {
@@ -77,14 +70,14 @@ describe("history", function() {
       }
     ]);
 
-    await browser.keys(undoKeyCombo)
-    await browser.keys(undoKeyComboReset);
+    await driver.typeKeys(undoKeyCombo)
+    await driver.typeKeys(undoKeyComboReset);
     styleObj = await helper.getStyleStore(browser);
     assert.deepEqual(styleObj.layers, [
     ]);
 
-    await browser.keys(redoKeyCombo)
-    await browser.keys(redoKeyComboReset);
+    await driver.typeKeys(redoKeyCombo)
+    await driver.typeKeys(redoKeyComboReset);
     styleObj = await helper.getStyleStore(browser);
     assert.deepEqual(styleObj.layers, [
       {
@@ -93,8 +86,8 @@ describe("history", function() {
       }
     ]);
 
-    await browser.keys(redoKeyCombo)
-    await browser.keys(redoKeyComboReset);
+    await driver.typeKeys(redoKeyCombo)
+    await driver.typeKeys(redoKeyComboReset);
     styleObj = await helper.getStyleStore(browser);
     assert.deepEqual(styleObj.layers, [
       {
