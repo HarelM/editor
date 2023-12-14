@@ -130,9 +130,7 @@ describe("layers", function() {
         // Setup
         var id = uuid();
 
-        const selectBox = await $(wd.$("add-layer.layer-type", "select"));
-        await selectBox.selectByAttribute('value', "background");
-        await browser.flushReactUpdates();
+        await driver.selectFromDropdown(wd.$("add-layer.layer-type", "select"), "background");
         await driver.setValue(wd.$("add-layer.layer-id", "input"), "background:"+id);
 
         await driver.click(wd.$("add-layer"));
@@ -241,7 +239,7 @@ describe("layers", function() {
           // TODO: This fails
           // await driver.setValue(wd.$("layer-comment", "textarea"), "");
           // await driver.click(wd.$("min-zoom", "input"));
-          // await browser.flushReactUpdates();
+          // await driver.zeroTimeout();
 
           // var styleObj = await helper.getStyleStore(browser);
           // assert.deepEqual(styleObj.layers, [
@@ -298,9 +296,9 @@ describe("layers", function() {
           var errorSelector = ".CodeMirror-lint-marker-error";
           assert.equal(await browser.isExisting(errorSelector), false);
 
-          await driver.click(".CodeMirror")
+          await driver.click(".CodeMirror");
           await driver.keys("\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013 {");
-          await browser.waitForExist(errorSelector)
+          await driver.waitForExist(errorSelector);
 
           await driver.click(wd.$("layer-editor.layer-id"));
         });

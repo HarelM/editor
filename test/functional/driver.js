@@ -5,9 +5,8 @@ const driver = {
     async setStyle(styleProperties) {
         await browser.url(config.baseUrl+"?debug&style="+helper.getStyleUrl(styleProperties));
         await browser.acceptAlert();
-        const elem = await $(".maputnik-toolbar-link");
-        await elem.waitForExist();
-        await browser.flushReactUpdates();
+        await this.waitForExist(".maputnik-toolbar-link");
+        await this.zeroTimeout();
     },
     async setSurvey() {
       await browser.execute(function() {
@@ -26,12 +25,24 @@ const driver = {
       const elem = await $(selector);
       await elem.click();
     },
+    async selectFromDropdown(selector, value) {
+      const selectBox = await $(selector);
+      await selectBox.selectByAttribute('value', value);
+      await this.zeroTimeout();
+    },
     async isDisplayedInViewport(selector) {
       const elem = await $(selector);
       return elem.isDisplayedInViewport();
     },
     async setValue(selector, value) {
       await browser.setValueSafe(selector, value);
+    },
+    async zeroTimeout() {
+      await browser.flushReactUpdates();
+    },
+    async waitForExist(selector) {
+      const elem = await $(selector);
+      await elem.waitForExist();
     }
 }
 module.exports = driver;
