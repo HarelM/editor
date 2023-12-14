@@ -8,6 +8,16 @@ const driver = {
         const elem = await $(".maputnik-toolbar-link");
         await elem.waitForExist();
         await browser.flushReactUpdates();
+    },
+    async setSurvey() {
+      await browser.execute(function() {
+        localStorage.setItem("survey", true);
+      });
+    },
+    async isMac() {
+      return await browser.execute(function() {
+        return navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+      });
     }
 }
 module.exports = driver;
