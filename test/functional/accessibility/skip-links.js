@@ -5,7 +5,9 @@ var driver = require("../driver");
 
 describe("skip links", function() {
   beforeEach(async function () {
-    await driver.setStyle("example-layer-style.json");
+    await browser.url(config.baseUrl+"?debug&style="+helper.getGeoServerUrl("example-layer-style.json"));
+    await browser.acceptAlert();
+    //await driver.setStyle("example-layer-style.json");
   });
 
   it("skip link to layer list", async function() {
