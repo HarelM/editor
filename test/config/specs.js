@@ -1,7 +1,7 @@
 
 const testNetwork = process.env.TEST_NETWORK || "localhost";
 const port = 9001;
-const baseUrl = "http://"+config.testNetwork+":"+config.port;
+const baseUrl = `http://${testNetwork}:${port}`;
 const config = {
     testNetwork,
     port,
