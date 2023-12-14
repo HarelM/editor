@@ -45,7 +45,7 @@ const driver = {
     async setValue(selector, value) {
       await browser.setValueSafe(selector, value);
     },
-    async getExampleFilePath() {
+    getExampleFilePath() {
       return __dirname + "/../../example-style.json";
     },
     async getExampleFileData() {
@@ -69,6 +69,9 @@ const driver = {
     async waitForExist(selector) {
       const elem = await $(selector);
       await elem.waitForExist();
+    },
+    async setWindowSize(height, width) {
+      await browser.setWindowSize(height, width);
     },
     async takeScreenShot(fileName) {
       await browser.takeScreenShot(fileName);
