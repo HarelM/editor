@@ -1,8 +1,6 @@
 var assert = require("assert");
 var driver = require("../driver");
 var {v1: uuid} = require('uuid');
-var wd     = require("../../wd-helper");
-
 
 describe("layers", function() {
   beforeEach(async function() {
@@ -28,7 +26,7 @@ describe("layers", function() {
         },
       ]);
 
-      await driver.click(wd.$("layer-list-item:"+id+":delete", ""))
+      await driver.click(driver.getDataAttribute("layer-list-item:"+id+":delete", ""))
 
       styleObj = await driver.getStyleStore();
       assert.deepEqual(styleObj.layers, [
@@ -49,7 +47,7 @@ describe("layers", function() {
         },
       ]);
 
-      await driver.click(wd.$("layer-list-item:"+id+":copy", ""));
+      await driver.click(driver.getDataAttribute("layer-list-item:"+id+":copy", ""));
 
       styleObj = await driver.getStyleStore();
       assert.deepEqual(styleObj.layers, [
@@ -78,7 +76,7 @@ describe("layers", function() {
         },
       ]);
 
-      await driver.click(wd.$("layer-list-item:"+id+":toggle-visibility", ""));
+      await driver.click(driver.getDataAttribute("layer-list-item:"+id+":toggle-visibility", ""));
 
       styleObj = await driver.getStyleStore();
       assert.deepEqual(styleObj.layers, [
@@ -91,7 +89,7 @@ describe("layers", function() {
         },
       ]);
 
-      await driver.click(wd.$("layer-list-item:"+id+":toggle-visibility", ""));
+      await driver.click(driver.getDataAttribute("layer-list-item:"+id+":toggle-visibility", ""));
 
       styleObj = await driver.getStyleStore();
       assert.deepEqual(styleObj.layers, [
@@ -128,10 +126,10 @@ describe("layers", function() {
         // Setup
         var id = uuid();
 
-        await driver.selectFromDropdown(wd.$("add-layer.layer-type", "select"), "background");
-        await driver.setValue(wd.$("add-layer.layer-id", "input"), "background:"+id);
+        await driver.selectFromDropdown(driver.getDataAttribute("add-layer.layer-type", "select"), "background");
+        await driver.setValue(driver.getDataAttribute("add-layer.layer-id", "input"), "background:"+id);
 
-        await driver.click(wd.$("add-layer"));
+        await driver.click(driver.getDataAttribute("add-layer"));
 
         var styleObj = await driver.getStyleStore();
         assert.deepEqual(styleObj.layers, [
@@ -149,11 +147,11 @@ describe("layers", function() {
         it("id", async function() {
           var bgId = await createBackground();
 
-          await driver.click(wd.$("layer-list-item:background:"+bgId));
+          await driver.click(driver.getDataAttribute("layer-list-item:background:"+bgId));
 
           var id = uuid();
-          await driver.setValue(wd.$("layer-editor.layer-id", "input"), "foobar:"+id)
-          await driver.click(wd.$("min-zoom"));
+          await driver.setValue(driver.getDataAttribute("layer-editor.layer-id", "input"), "foobar:"+id)
+          await driver.click(driver.getDataAttribute("min-zoom"));
 
           var styleObj = await driver.getStyleStore();
           assert.deepEqual(styleObj.layers, [
@@ -167,10 +165,10 @@ describe("layers", function() {
         it("min-zoom", async function() {
           var bgId = await createBackground();
 
-          await driver.click(wd.$("layer-list-item:background:"+bgId));
-          await driver.setValue(wd.$("min-zoom", 'input[type="text"]'), 1)
+          await driver.click(driver.getDataAttribute("layer-list-item:background:"+bgId));
+          await driver.setValue(driver.getDataAttribute("min-zoom", 'input[type="text"]'), 1)
 
-          await driver.click(wd.$("layer-editor.layer-id", "input"));
+          await driver.click(driver.getDataAttribute("layer-editor.layer-id", "input"));
 
           var styleObj = await driver.getStyleStore();
           assert.deepEqual(styleObj.layers, [
@@ -182,8 +180,8 @@ describe("layers", function() {
           ]);
 
           // AND RESET!
-          // await driver.setValue(wd.$("min-zoom", "input"), "")
-          // await driver.click(wd.$("max-zoom", "input"));
+          // await driver.setValue(driver.getDataAttribute("min-zoom", "input"), "")
+          // await driver.click(driver.getDataAttribute("max-zoom", "input"));
 
           // var styleObj = await driver.getStyleStore();
 
@@ -198,10 +196,10 @@ describe("layers", function() {
         it("max-zoom", async function() {
           var bgId = await createBackground();
 
-          await driver.click(wd.$("layer-list-item:background:"+bgId));
-          await driver.setValue(wd.$("max-zoom", 'input[type="text"]'), 1)
+          await driver.click(driver.getDataAttribute("layer-list-item:background:"+bgId));
+          await driver.setValue(driver.getDataAttribute("max-zoom", 'input[type="text"]'), 1)
 
-          await driver.click(wd.$("layer-editor.layer-id", "input"));
+          await driver.click(driver.getDataAttribute("layer-editor.layer-id", "input"));
 
           var styleObj = await driver.getStyleStore();
           assert.deepEqual(styleObj.layers, [
@@ -217,10 +215,10 @@ describe("layers", function() {
           var bgId = await createBackground();
           var id = uuid();
 
-          await driver.click(wd.$("layer-list-item:background:"+bgId));
-          await driver.setValue(wd.$("layer-comment", "textarea"), id);
+          await driver.click(driver.getDataAttribute("layer-list-item:background:"+bgId));
+          await driver.setValue(driver.getDataAttribute("layer-comment", "textarea"), id);
 
-          await driver.click(wd.$("layer-editor.layer-id", "input"));
+          await driver.click(driver.getDataAttribute("layer-editor.layer-id", "input"));
 
           var styleObj = await driver.getStyleStore();
           assert.deepEqual(styleObj.layers, [
@@ -235,8 +233,8 @@ describe("layers", function() {
 
           // Unset it again.
           // TODO: This fails
-          // await driver.setValue(wd.$("layer-comment", "textarea"), "");
-          // await driver.click(wd.$("min-zoom", "input"));
+          // await driver.setValue(driver.getDataAttribute("layer-comment", "textarea"), "");
+          // await driver.click(driver.getDataAttribute("min-zoom", "input"));
           // await driver.zeroTimeout();
 
           // var styleObj = await driver.getStyleStore();
@@ -251,9 +249,9 @@ describe("layers", function() {
         it("color", null, async function() {
           var bgId = await createBackground();
 
-          await driver.click(wd.$("layer-list-item:background:"+bgId));
+          await driver.click(driver.getDataAttribute("layer-list-item:background:"+bgId));
 
-          await driver.click(wd.$("spec-field:background-color", "input"));
+          await driver.click(driver.getDataAttribute("spec-field:background-color", "input"));
 
           var styleObj = await driver.getStyleStore();
           assert.deepEqual(styleObj.layers, [
@@ -289,7 +287,7 @@ describe("layers", function() {
 
 
 
-          await driver.click(wd.$("layer-list-item:background:"+bgId));
+          await driver.click(driver.getDataAttribute("layer-list-item:background:"+bgId));
 
           var errorSelector = ".CodeMirror-lint-marker-error";
           assert.equal(await driver.isExisting(errorSelector), false);
@@ -298,7 +296,7 @@ describe("layers", function() {
           await driver.keys("\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013 {");
           await driver.waitForExist(errorSelector);
 
-          await driver.click(wd.$("layer-editor.layer-id"));
+          await driver.click(driver.getDataAttribute("layer-editor.layer-id"));
         });
       });
     })
@@ -445,15 +443,15 @@ describe("layers", function() {
         type: "background"
       })
 
-      assert.equal(await driver.isDisplayedInViewport(wd.$("layer-list-item:foo")), true);
-      assert.equal(await driver.isDisplayedInViewport(wd.$("layer-list-item:foo_bar")), false);
-      assert.equal(await driver.isDisplayedInViewport(wd.$("layer-list-item:foo_bar_baz")), false);
+      assert.equal(await driver.isDisplayedInViewport(driver.getDataAttribute("layer-list-item:foo")), true);
+      assert.equal(await driver.isDisplayedInViewport(driver.getDataAttribute("layer-list-item:foo_bar")), false);
+      assert.equal(await driver.isDisplayedInViewport(driver.getDataAttribute("layer-list-item:foo_bar_baz")), false);
 
-      await driver.click(wd.$("layer-list-group:foo-0"));
+      await driver.click(driver.getDataAttribute("layer-list-group:foo-0"));
 
-      assert.equal(await driver.isDisplayedInViewport(wd.$("layer-list-item:foo")), true);
-      assert.equal(await driver.isDisplayedInViewport(wd.$("layer-list-item:foo_bar")), true);
-      assert.equal(await driver.isDisplayedInViewport(wd.$("layer-list-item:foo_bar_baz")), true);
+      assert.equal(await driver.isDisplayedInViewport(driver.getDataAttribute("layer-list-item:foo")), true);
+      assert.equal(await driver.isDisplayedInViewport(driver.getDataAttribute("layer-list-item:foo_bar")), true);
+      assert.equal(await driver.isDisplayedInViewport(driver.getDataAttribute("layer-list-item:foo_bar_baz")), true);
 
     })
   })

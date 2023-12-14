@@ -1,5 +1,4 @@
 var assert = require('assert');
-var wd     = require("../../wd-helper");
 var driver = require("../driver");
 
 describe("modals", function() {
@@ -7,7 +6,7 @@ describe("modals", function() {
     beforeEach(async function() {
 
       await driver.setStyle();
-      await driver.click(wd.$("nav:open"));
+      await driver.click(driver.getDataAttribute("nav:open"));
       await driver.zeroTimeout();
     });
 
@@ -26,9 +25,9 @@ describe("modals", function() {
     it("load from url", async function() {
       var styleFileUrl = driver.getGeoServerUrl("example-style.json");
 
-      await driver.setValue(wd.$("modal:open.url.input"), styleFileUrl);
+      await driver.setValue(driver.getDataAttribute("modal:open.url.input"), styleFileUrl);
 
-      await driver.click(wd.$("modal:open.url.button"))
+      await driver.click(driver.getDataAttribute("modal:open.url.button"))
 
       // Allow the network request to happen
       // NOTE: Its localhost so this should be fast.
@@ -45,7 +44,7 @@ describe("modals", function() {
 
       await driver.typeKeys(["?"]);
 
-      const modalEl = await $(wd.$("modal:shortcuts"))
+      const modalEl = await $(driver.getDataAttribute("modal:shortcuts"))
       assert(await modalEl.isDisplayed());
 
       await driver.closeModal("modal:shortcuts");
@@ -57,7 +56,7 @@ describe("modals", function() {
 
     beforeEach(async function() {
       await driver.setStyle();
-      await driver.click(wd.$("nav:export"));
+      await driver.click(driver.getDataAttribute("nav:export"));
       await driver.zeroTimeout();
     });
 
@@ -80,36 +79,36 @@ describe("modals", function() {
     it("toggle", async function() {
       await driver.setStyle(["geojson:example"]);
 
-      await driver.selectFromDropdown(wd.$("nav:inspect", "select"), "inspect");
+      await driver.selectFromDropdown(driver.getDataAttribute("nav:inspect", "select"), "inspect");
     })
   })
 
   describe("style settings", function() {
     beforeEach(async function() {
       await driver.setStyle();
-      await driver.click(wd.$("nav:settings"));
+      await driver.click(driver.getDataAttribute("nav:settings"));
       await driver.zeroTimeout();
     });
 
     it("name", async function() {
-      await driver.setValue(wd.$("modal:settings.name"), "foobar");
-      await driver.click(wd.$("modal:settings.owner"));
+      await driver.setValue(driver.getDataAttribute("modal:settings.name"), "foobar");
+      await driver.click(driver.getDataAttribute("modal:settings.owner"));
       await driver.zeroTimeout();
 
       var styleObj = await driver.getStyleStore();
       assert.equal(styleObj.name, "foobar");
     })
     it("owner", async function() {
-      await driver.setValue(wd.$("modal:settings.owner"), "foobar")
-      await driver.click(wd.$("modal:settings.name"));
+      await driver.setValue(driver.getDataAttribute("modal:settings.owner"), "foobar")
+      await driver.click(driver.getDataAttribute("modal:settings.name"));
       await driver.zeroTimeout();
 
       var styleObj = await driver.getStyleStore();
       assert.equal(styleObj.owner, "foobar");
     })
     it("sprite url", async function() {
-      await driver.setValue(wd.$("modal:settings.sprite"), "http://example.com")
-      await driver.click(wd.$("modal:settings.name"));
+      await driver.setValue(driver.getDataAttribute("modal:settings.sprite"), "http://example.com")
+      await driver.click(driver.getDataAttribute("modal:settings.name"));
       await driver.zeroTimeout();
 
       var styleObj = await driver.getStyleStore();
@@ -117,8 +116,8 @@ describe("modals", function() {
     })
     it("glyphs url", async function() {
       var glyphsUrl = "http://example.com/{fontstack}/{range}.pbf"
-      await driver.setValue(wd.$("modal:settings.glyphs"), glyphsUrl);
-      await driver.click(wd.$("modal:settings.name"));
+      await driver.setValue(driver.getDataAttribute("modal:settings.glyphs"), glyphsUrl);
+      await driver.click(driver.getDataAttribute("modal:settings.name"));
       await driver.zeroTimeout();
 
       var styleObj = await driver.getStyleStore();
@@ -127,8 +126,8 @@ describe("modals", function() {
 
     it("maptiler access token", async function() {
       var apiKey = "testing123";
-      await driver.setValue(wd.$("modal:settings.maputnik:openmaptiles_access_token"), apiKey);
-      await driver.click(wd.$("modal:settings.name"));
+      await driver.setValue(driver.getDataAttribute("modal:settings.maputnik:openmaptiles_access_token"), apiKey);
+      await driver.click(driver.getDataAttribute("modal:settings.name"));
       await driver.zeroTimeout();
 
       var styleObj = await driver.getStyleStore();
@@ -137,8 +136,8 @@ describe("modals", function() {
 
     it("thunderforest access token", async function() {
       var apiKey = "testing123";
-      await driver.setValue(wd.$("modal:settings.maputnik:thunderforest_access_token"), apiKey);
-      await driver.click(wd.$("modal:settings.name"));
+      await driver.setValue(driver.getDataAttribute("modal:settings.maputnik:thunderforest_access_token"), apiKey);
+      await driver.click(driver.getDataAttribute("modal:settings.name"));
       await driver.zeroTimeout();
 
       var styleObj = await driver.getStyleStore();
@@ -146,8 +145,8 @@ describe("modals", function() {
     })
 
     it("style renderer", async function() {
-      await driver.selectFromDropdown(wd.$("modal:settings.maputnik:renderer"), "ol");
-      await driver.click(wd.$("modal:settings.name"));
+      await driver.selectFromDropdown(driver.getDataAttribute("modal:settings.maputnik:renderer"), "ol");
+      await driver.click(driver.getDataAttribute("modal:settings.name"));
       await driver.zeroTimeout();
 
       var styleObj = await driver.getStyleStore();

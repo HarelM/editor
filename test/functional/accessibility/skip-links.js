@@ -1,5 +1,4 @@
 var assert = require("assert");
-var wd     = require("../../wd-helper");
 var driver = require("../driver");
 
 
@@ -9,7 +8,7 @@ describe("skip links", function() {
   });
 
   it("skip link to layer list", async function() {
-    const selector = wd.$("root:skip:layer-list")
+    const selector = driver.getDataAttribute("root:skip:layer-list")
     assert(await driver.isExisting(selector));
     await driver.typeKeys(['Tab']);
     assert(await driver.isFocused(selector));
@@ -19,7 +18,7 @@ describe("skip links", function() {
   });
 
   it("skip link to layer editor", async function() {
-    const selector = wd.$("root:skip:layer-editor")
+    const selector = driver.getDataAttribute("root:skip:layer-editor")
     assert(await driver.isExisting(selector));
     await driver.typeKeys(['Tab']);
     await driver.typeKeys(['Tab']);
@@ -30,7 +29,7 @@ describe("skip links", function() {
   });
 
   it("skip link to map view", async function() {
-    const selector = wd.$("root:skip:map-view")
+    const selector = driver.getDataAttribute("root:skip:map-view")
     assert(await driver.isExisting(selector));
     await driver.typeKeys(['Tab']);
     await driver.typeKeys(['Tab']);

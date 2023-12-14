@@ -1,5 +1,4 @@
 var driver    = require("../driver");
-var wd        = require("../../wd-helper");
 
 
 // These will get used in the marketing material. They are also useful to do a quick manual check of the styling across browsers
@@ -18,7 +17,7 @@ describe('screenshots', function() {
 
   it("open", async function() {
     await driver.setStyle(["geojson:example"]);
-    await driver.click(wd.$("nav:open"));
+    await driver.click(driver.getDataAttribute("nav:open"));
     await driver.zeroTimeout();
 
     await driver.takeScreenShot("/open.png")
@@ -27,7 +26,7 @@ describe('screenshots', function() {
   it("export", async function() {
     await driver.setStyle(["geojson:example"]);
 
-    await driver.click(wd.$("nav:export"));
+    await driver.click(driver.getDataAttribute("nav:export"));
     await driver.zeroTimeout();
 
     await driver.takeScreenShot("/export.png")
@@ -36,7 +35,7 @@ describe('screenshots', function() {
   it("sources", async function() {
     await driver.setStyle(["geojson:example"]);
 
-    await driver.click(wd.$("nav:sources"));
+    await driver.click(driver.getDataAttribute("nav:sources"));
     await driver.zeroTimeout();
 
     await driver.takeScreenShot("/sources.png")
@@ -45,7 +44,7 @@ describe('screenshots', function() {
   it("style settings", async function() {
     await driver.setStyle(["geojson:example"]);
 
-    await driver.click(wd.$("nav:settings"));
+    await driver.click(driver.getDataAttribute("nav:settings"));
     await driver.zeroTimeout();
 
     await driver.takeScreenShot("/settings.png")
@@ -54,7 +53,7 @@ describe('screenshots', function() {
   it("inspect", async function() {
     await driver.setStyle(["geojson:example"]);
 
-    await driver.selectFromDropdown(wd.$("nav:inspect", "select"), 'inspect');
+    await driver.selectFromDropdown(driver.getDataAttribute("nav:inspect", "select"), 'inspect');
     await driver.zeroTimeout();
 
     await driver.takeScreenShot("/inspect.png")

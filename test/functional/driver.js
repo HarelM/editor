@@ -1,7 +1,6 @@
 var {v1: uuid} = require('uuid');
 var fs = require("fs");
 var config = require("../config/specs");
-var wd = require("../wd-helper");
 var geoServer = require("../geojson-server");
 
 var testNetwork = process.env.TEST_NETWORK || "localhost";
@@ -114,14 +113,18 @@ const driver = {
     async takeScreenShot(fileName) {
       await browser.takeScreenShot(fileName);
     },
+    getDataAttribute(key, selector) {
+      selector = selector || "";
+      return "*[data-wd-key='"+key+"'] "+selector;
+    },
     async openLayersModal() {
-      const selector = await $(wd.$('layer-list:add-layer'));
+      const selector = await $(this.getDataAttribute('layer-list:add-layer'));
       await selector.click();
 
       // Wait for events
       await browser.flushReactUpdates();
 
-      const elem = await $(wd.$('modal:add-layer'));
+      const elem = await $(this.getDataAttribute('modal:add-layer'));
       await elem.waitForExist();
       await elem.isDisplayed();
       await elem.isDisplayedInViewport();
@@ -140,31 +143,31 @@ const driver = {
         id = type+":"+uuid();
       }
 
-      const selectBox = await $(wd.$("add-layer.layer-type", "select"));
+      const selectBox = await $(this.getDataAttribute("add-layer.layer-type", "select"));
       await selectBox.selectByAttribute('value', type);
       await browser.flushReactUpdates();
 
-      await browser.setValueSafe(wd.$("add-layer.layer-id", "input"), id);
+      await browser.setValueSafe(this.getDataAttribute("add-layer.layer-id", "input"), id);
       if(layer) {
-        await browser.setValueSafe(wd.$("add-layer.layer-source-block", "input"), layer);
+        await browser.setValueSafe(this.getDataAttribute("add-layer.layer-source-block", "input"), layer);
       }
 
       await browser.flushReactUpdates();
-      const elem_addLayer = await $(wd.$("add-layer"));
+      const elem_addLayer = await $(this.getDataAttribute("add-layer"));
       await elem_addLayer.click();
 
       return id;
     },
 
     async closeModal(wdKey) {
-      const selector = wd.$(wdKey);
+      const selector = this.getDataAttribute(wdKey);
     
       await browser.waitUntil(async function() {
         const elem = await $(selector);
         return await elem.isDisplayedInViewport();
       });
     
-      await this.click(wd.$(wdKey+".close-modal"));
+      await this.click(this.getDataAttribute(wdKey+".close-modal"));
     
       await browser.waitUntil(async function() {
         return await browser.execute((selector) => {

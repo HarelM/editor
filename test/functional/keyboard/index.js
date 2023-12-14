@@ -1,11 +1,10 @@
 var assert = require("assert");
-var wd     = require("../../wd-helper");
 var driver = require("../driver");
 
 describe("keyboard", function() {
   describe("shortcuts", function() {
     it("ESC should unfocus", async function() {
-      const targetSelector = wd.$("nav:inspect") + " select";
+      const targetSelector = driver.getDataAttribute("nav:inspect") + " select";
       driver.click(targetSelector);
       assert(await driver.isFocused(targetSelector));
 
@@ -15,27 +14,28 @@ describe("keyboard", function() {
 
     it("'?' should show shortcuts modal", async function() {
       await driver.typeKeys(["?"]);
-      assert(await driver.isDisplayedInViewport(wd.$("modal:shortcuts")));
+      assert(await driver.isDisplayedInViewport(driver.getDataAttribute("modal:shortcuts")));
     });
 
     it("'o' should show open modal", async function() {
       await driver.typeKeys(["o"]);
-      assert(await driver.isDisplayedInViewport(wd.$("modal:open")));
+      assert(await driver.isDisplayedInViewport(driver.getDataAttribute("modal:open")));
     });
 
     it("'e' should show export modal", async function() {
       await driver.typeKeys(["e"]);
-      assert(await driver.isDisplayedInViewport(wd.$("modal:export")));
+      await driver.sleep(100);
+      assert(await driver.isDisplayedInViewport(driver.getDataAttribute("modal:export")));
     });
 
     it("'d' should show sources modal", async function() {
       await driver.typeKeys(["d"]);
-      assert(await driver.isDisplayedInViewport(wd.$("modal:sources")));
+      assert(await driver.isDisplayedInViewport(driver.getDataAttribute("modal:sources")));
     });
 
     it("'s' should show settings modal", async function() {
       await driver.typeKeys(["s"]);
-      assert(await driver.isDisplayedInViewport(wd.$("modal:settings")));
+      assert(await driver.isDisplayedInViewport(driver.getDataAttribute("modal:settings")));
     });
 
     it.skip("'i' should change map to inspect mode", async function() {
@@ -49,7 +49,7 @@ describe("keyboard", function() {
 
     it("'!' should show debug modal", async function() {
       await driver.typeKeys(["!"]);
-      assert(await driver.isDisplayedInViewport(wd.$("modal:debug")));
+      assert(await driver.isDisplayedInViewport(driver.getDataAttribute("modal:debug")));
     });
   });
 
