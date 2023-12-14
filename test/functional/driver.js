@@ -40,6 +40,9 @@ const driver = {
     async zeroTimeout() {
       await browser.flushReactUpdates();
     },
+    async isExisting(selector) {
+      return browser.isExisting(selector);
+    },
     async waitForExist(selector) {
       const elem = await $(selector);
       await elem.waitForExist();

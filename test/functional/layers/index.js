@@ -294,7 +294,7 @@ describe("layers", function() {
           await driver.click(wd.$("layer-list-item:background:"+bgId));
 
           var errorSelector = ".CodeMirror-lint-marker-error";
-          assert.equal(await browser.isExisting(errorSelector), false);
+          assert.equal(await driver.isExisting(errorSelector), false);
 
           await driver.click(".CodeMirror");
           await driver.keys("\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013 {");
