@@ -25,6 +25,10 @@ const driver = {
     async click(selector) {
       const elem = await $(selector);
       await elem.click();
+    },
+    async isDisplayedInViewport(selector) {
+      const elem = await $(selector);
+      return elem.isDisplayedInViewport();
     }
 }
 module.exports = driver;

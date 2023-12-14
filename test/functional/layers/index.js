@@ -292,16 +292,18 @@ describe("layers", function() {
         it.skip("parse error", async function() {
           var bgId = await createBackground();
 
-          await browser.click(wd.$("layer-list-item:background:"+bgId));
+
+
+          await driver.click(wd.$("layer-list-item:background:"+bgId));
 
           var errorSelector = ".CodeMirror-lint-marker-error";
           assert.equal(await browser.isExisting(errorSelector), false);
 
-          await browser.click(".CodeMirror")
-          await browser.keys("\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013 {");
+          await driver.click(".CodeMirror")
+          await driver.keys("\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013\uE013 {");
           await browser.waitForExist(errorSelector)
 
-          await browser.click(wd.$("layer-editor.layer-id"));
+          await driver.click(wd.$("layer-editor.layer-id"));
         });
       });
     })
@@ -452,18 +454,16 @@ describe("layers", function() {
         type: "background"
       })
 
-      const groupEl = await $(wd.$("layer-list-group:foo-0"));
-      await groupEl.isDisplayed();
+      assert.equal(await driver.isDisplayedInViewport(wd.$("layer-list-item:foo")), true);
+      assert.equal(await driver.isDisplayedInViewport(wd.$("layer-list-item:foo_bar")), false);
+      assert.equal(await driver.isDisplayedInViewport(wd.$("layer-list-item:foo_bar_baz")), false);
 
-      assert.equal(await (await $(wd.$("layer-list-item:foo"))).isDisplayedInViewport(), true);
-      assert.equal(await (await $(wd.$("layer-list-item:foo_bar"))).isDisplayedInViewport(), false);
-      assert.equal(await (await $(wd.$("layer-list-item:foo_bar_baz"))).isDisplayedInViewport(), false);
+      await driver.click(wd.$("layer-list-group:foo-0"));
 
-      await groupEl.click();
+      assert.equal(await driver.isDisplayedInViewport(wd.$("layer-list-item:foo")), true);
+      assert.equal(await driver.isDisplayedInViewport(wd.$("layer-list-item:foo_bar")), true);
+      assert.equal(await driver.isDisplayedInViewport(wd.$("layer-list-item:foo_bar_baz")), true);
 
-      assert.equal(await (await $(wd.$("layer-list-item:foo"))).isDisplayedInViewport(), true);
-      assert.equal(await (await $(wd.$("layer-list-item:foo_bar"))).isDisplayedInViewport(), true);
-      assert.equal(await (await $(wd.$("layer-list-item:foo_bar_baz"))).isDisplayedInViewport(), true);
     })
   })
 });
