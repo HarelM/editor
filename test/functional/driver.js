@@ -8,7 +8,9 @@ const driver = {
         url += "&style=" + helper.getStyleUrl(styleProperties);
       }
       await browser.url(url);
-      await browser.acceptAlert();
+      if (styleProperties) {
+        await browser.acceptAlert();
+      }
       await this.waitForExist(".maputnik-toolbar-link");
       await this.zeroTimeout();
     },
@@ -41,8 +43,23 @@ const driver = {
     async setValue(selector, value) {
       await browser.setValueSafe(selector, value);
     },
+    async getExampleFilePath() {
+      return __dirname + "/../../example-style.json";
+    },
+    async getExampleFileData() {
+      var styleFilePath = this.getExampleFilePath();
+      return JSON.parse(fs.readFileSync(styleFilePath));
+    },
+    async chooseExampleFile() {
+      const elem = await $("*[type='file']");
+      await elem.waitForExist();
+      await browser.chooseFile("*[type='file']", this.getExampleFilePath());
+    },
     async zeroTimeout() {
       await browser.flushReactUpdates();
+    },
+    async sleep(milliseconds) {
+      await browser.pause(milliseconds);
     },
     async isExisting(selector) {
       return browser.isExisting(selector);
