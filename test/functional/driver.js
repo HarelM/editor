@@ -1,4 +1,4 @@
-var config = require("./config/spec");
+var config = require("../config/specs");
 var helper = require("./util/helper");
 
 const driver = {
@@ -18,6 +18,9 @@ const driver = {
       return await browser.execute(function() {
         return navigator.platform.toUpperCase().indexOf('MAC') >= 0;
       });
+    },
+    async typeKeys(keys) {
+      await browser.keys(keys)
     }
 }
 module.exports = driver;
