@@ -42,6 +42,10 @@ const driver = {
       const elem = await $(selector);
       return elem.isDisplayedInViewport();
     },
+    async isFocused(selector) {
+      const elem = await $(selector);
+      return elem.isFocused();
+    },
     async setValue(selector, value) {
       await browser.setValueSafe(selector, value);
     },
