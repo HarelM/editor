@@ -1,10 +1,10 @@
 var driver      = require("./driver");
-var extendWebdriverIO = require("./util/webdriverio-ext");
 
 describe('maputnik', function() {
 
   before(async function(done) {
-    await extendWebdriverIO();
+    await browser.setTimeout({ 'script': 20 * 1000 });
+    await browser.setTimeout({ 'implicit': 20 * 1000 });
     driver.geoserver.start(done);
   });
 

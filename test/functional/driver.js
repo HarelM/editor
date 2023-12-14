@@ -1,7 +1,11 @@
 var {v1: uuid} = require('uuid');
 var fs = require("fs");
+var path = require("path");
 var config = require("../config/specs");
 var geoServer = require("../geojson-server");
+var artifacts = require("../artifacts");
+
+var SCREENSHOTS_PATH = artifacts.pathSync("/screenshots");
 
 var testNetwork = process.env.TEST_NETWORK || "localhost";
 var geoserver;
@@ -78,8 +82,36 @@ const driver = {
       const elem = await $(selector);
       return elem.isFocused();
     },
-    async setValue(selector, value) {
-      await browser.setValueSafe(selector, value);
+    /**
+     * Sometimes chrome driver can result in the wrong text.
+     *
+     * See <https://github.com/webdriverio/webdriverio/issues/1886>
+     */
+    async setValue(selector, text) {
+      for (var i = 0; i < 10; i++) {
+        const elem = await $(selector);
+        await elem.waitForDisplayed(500);
+
+        var elements = await browser.findElements("css selector", selector);
+        if (elements.length > 1) {
+          throw "Too many elements found";
+        }
+
+        const elem2 = await $(selector);
+        await elem2.setValue(text);
+
+        var browserText = await elem2.getValue();
+
+        if (browserText == text) {
+          return;
+        }
+        else {
+          console.error("Warning: setValue failed, trying again");
+        }
+      }
+
+      // Wait for change events to fire and state updated
+      await this.zeroTimeout();
     },
     getExampleFilePath() {
       return __dirname + "/../example-style.json";
@@ -94,7 +126,13 @@ const driver = {
       await browser.chooseFile("*[type='file']", this.getExampleFilePath());
     },
     async zeroTimeout() {
-      await browser.flushReactUpdates();
+      await browser.executeAsync(function (done) {
+        // For any events to propagate
+        setTimeout(function () {
+          // For the DOM to be updated.
+          setTimeout(done, 0);
+        }, 0)
+      })
     },
     async sleep(milliseconds) {
       await browser.pause(milliseconds);
@@ -110,8 +148,9 @@ const driver = {
     async setWindowSize(height, width) {
       await browser.setWindowSize(height, width);
     },
-    async takeScreenShot(fileName) {
-      await browser.takeScreenShot(fileName);
+    async takeScreenShot(filepath) {
+      var savepath = path.join(SCREENSHOTS_PATH, filepath);
+      await browser.saveScreenshot(savepath);
     },
     getDataAttribute(key, selector) {
       selector = selector || "";
@@ -122,7 +161,7 @@ const driver = {
       await selector.click();
 
       // Wait for events
-      await browser.flushReactUpdates();
+      await this.zeroTimeout();
 
       const elem = await $(this.getDataAttribute('modal:add-layer'));
       await elem.waitForExist();
@@ -130,7 +169,7 @@ const driver = {
       await elem.isDisplayedInViewport();
 
       // Wait for events
-      await browser.flushReactUpdates();
+      await this.zeroTimeout();
     },
     async fillLayersModal(opts) {
       var type = opts.type;
@@ -145,14 +184,14 @@ const driver = {
 
       const selectBox = await $(this.getDataAttribute("add-layer.layer-type", "select"));
       await selectBox.selectByAttribute('value', type);
-      await browser.flushReactUpdates();
+      await this.zeroTimeout();
 
-      await browser.setValueSafe(this.getDataAttribute("add-layer.layer-id", "input"), id);
+      await this.setValue(this.getDataAttribute("add-layer.layer-id", "input"), id);
       if(layer) {
-        await browser.setValueSafe(this.getDataAttribute("add-layer.layer-source-block", "input"), layer);
+        await this.setValue(this.getDataAttribute("add-layer.layer-source-block", "input"), layer);
       }
 
-      await browser.flushReactUpdates();
+      await this.zeroTimeout();
       const elem_addLayer = await $(this.getDataAttribute("add-layer"));
       await elem_addLayer.click();
 
