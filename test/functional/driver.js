@@ -70,7 +70,8 @@ const driver = {
       await browser.pause(milliseconds);
     },
     async isExisting(selector) {
-      return browser.isExisting(selector);
+      const elem = await $(selector);
+      await elem.isExisting();
     },
     async waitForExist(selector) {
       const elem = await $(selector);
